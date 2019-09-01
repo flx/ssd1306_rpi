@@ -67,7 +67,7 @@ int main(int argc, char **argv){
 
   init_hardware_spi();
   int y;
-  for (num=0;num<1024;num++) {
+  for (int num=0;num<1024;num++) {
 	  if (num%2==0) frame[num] = 0xFF; else frame[num] = 0;
   }
   init_hardware_spi();
