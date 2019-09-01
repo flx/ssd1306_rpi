@@ -65,13 +65,14 @@ unsigned char init_command[] = {
 
 int main(int argc, char **argv){
 
+  init_hardware_spi();
+
   int byte;
 
   for(byte=0;byte<1024;byte++){
-    frame[byte] = 0x00;
+    frame[byte] = 0xFF;
   }
 
-  init_hardware_spi();
   show_hardware_spi();	
 }
 
@@ -81,12 +82,6 @@ Initialize SSD1306 (hardware spi)
 */
 
 void init_hardware_spi(void){
-  int byte;
-
-  for(byte=0;byte<1024;byte++){
-    frame[byte] = 0x00;
-  }
-
   wiringPiSetup();
   pinMode (DC, OUTPUT) ;
   pinMode (RST, OUTPUT) ;
