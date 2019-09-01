@@ -70,6 +70,7 @@ int main(int argc, char **argv){
   for (num=0;num<1024;num++) {
 	  if (num%2==0) frame[num] = 0xFF; else frame[num] = 0;
   }
+  init_hardware_spi();
   show_hardware_spi();	
 }
 
