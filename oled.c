@@ -65,11 +65,12 @@ unsigned char init_command[] = {
 
 int main(int argc, char **argv){
 
-  init_hardware_spi();
-  int y;
-  for (int num=0;num<1024;num++) {
-	  if (num%2==0) frame[num] = 0xFF; else frame[num] = 0;
+  int byte;
+
+  for(byte=0;byte<1024;byte++){
+    frame[byte] = 0x00;
   }
+
   init_hardware_spi();
   show_hardware_spi();	
 }
