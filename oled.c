@@ -155,12 +155,12 @@ int main(int argc, char **argv){
 //                            sv.save[num].enhance);
 //       }
 //     }
+    init_hardware_spi();
 	
 	for (int i = 0; i<1024; i++) {
 		if (i%2 == 0) frame[i] = 0B10101111;
 	}
 	
-    init_hardware_spi();
     show_hardware_spi();	
   }
 
