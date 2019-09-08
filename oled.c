@@ -99,15 +99,15 @@ void show_hardware_spi(void){
     delay(50);
     digitalWrite(RST,  HIGH) ;
     digitalWrite(DC, LOW);
-    digitalWrite(CS, LOW);
+    // digitalWrite(CS, LOW);
     wiringPiSPIDataRW(0, init_command, sizeof(init_command));
-    digitalWrite(CS, HIGH);
+    // digitalWrite(CS, HIGH);
 
 	// show frame
   digitalWrite(DC,  HIGH);
-  digitalWrite(CS, LOW);
+  // digitalWrite(CS, LOW);
   wiringPiSPIDataRW(0, frame, 1024);
-  digitalWrite(CS, HIGH);
+  // digitalWrite(CS, HIGH);
 }
 
 
