@@ -170,9 +170,6 @@ int main(int argc, char **argv){
     show_hardware_spi();	
   }
 
-  if (strcmp(argv[1],"D") == 0) {
-    DumpSaveFrame(sv);
-  }
 }
 
 
