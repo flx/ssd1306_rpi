@@ -49,11 +49,18 @@
 #define RST  8  // You can change
 #define DC   7  // You can change
 
+// Software SPI
+#define MOSI 12 // You can change
+#define SCLK 14 // You can change
+#define CS   10  // You can change
+
 
 unsigned char frame[1024]; // frame buffer
 
 void init_hardware_spi(void);
 void show_hardware_spi(void);
+
+int i2cd;
 
 // 128x64
 unsigned char init_command[] = {
@@ -66,26 +73,15 @@ unsigned char init_command[] = {
 
 
 int main(int argc, char **argv){
-    init_hardware_spi();
 	
 	for (int i = 0; i<8; i++) {
 		if (i%2 == 0) frame[i] = 0B01011111;
 	}
 	
     show_hardware_spi();	
-  }
 
 }
 
-
-/*
-Initialize SSD1306 (hardware spi)
-*/
-
-void init_hardware_spi(void){
-
-
-}
 
 /*
 Show frame buffer to SSD1306 (spi)
