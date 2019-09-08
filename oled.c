@@ -140,7 +140,6 @@ int main(int argc, char **argv){
 
   if (strcmp(argv[1],"s") == 0) {
 
-    init_hardware_spi();
     // int y;
 //     for (num=0;num<4;num++) {
 //       if (sv.save[num].size == 0) continue;
@@ -162,6 +161,7 @@ int main(int argc, char **argv){
 		if (i%2 == 0) frame[i] = 0B10101111;
 	}
 	
+    init_hardware_spi();
     show_hardware_spi();	
   }
 
