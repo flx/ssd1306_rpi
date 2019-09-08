@@ -157,8 +157,8 @@ int main(int argc, char **argv){
 //     }
     init_hardware_spi();
 	
-	for (int i = 0; i<1024; i++) {
-		if (i%2 == 0) frame[i] = 0B10101111;
+	for (int i = 0; i<8; i++) {
+		if (i%2 == 0) frame[i] = 0B01011111;
 	}
 	
     show_hardware_spi();	
