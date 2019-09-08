@@ -292,6 +292,11 @@ int main(int argc, char **argv){
                            sv.save[num].enhance);
       }
     }
+	
+	for (int i = 0; i<1024; i++) {
+		if (i%2 == 0) frame[i] == 0xFF;
+	}
+	
     show_hardware_spi();	
   }
 
