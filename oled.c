@@ -277,25 +277,25 @@ int main(int argc, char **argv){
   if (strcmp(argv[1],"s") == 0) {
 
     init_hardware_spi();
-    int y;
-    for (num=0;num<4;num++) {
-      if (sv.save[num].size == 0) continue;
-//      y = 1;
-      y = sv.save[num].colum+1;
-      for (i=0;i<sv.save[num].size;i++) {
-         
-        if (sv.save[num].ank)
-          y = drawChar(num+1,y,sv.save[num].ascii[i],sv.save[num].reverse,
-                       sv.save[num].enhance);
-        if (sv.save[num].utf)
-          y = drawSJISChar(fx,num+1,y,sv.save[num].sjis[i],sv.save[num].reverse,
-                           sv.save[num].enhance);
-      }
-    }
+    // int y;
+//     for (num=0;num<4;num++) {
+//       if (sv.save[num].size == 0) continue;
+// //      y = 1;
+//       y = sv.save[num].colum+1;
+//       for (i=0;i<sv.save[num].size;i++) {
+//
+//         if (sv.save[num].ank)
+//           y = drawChar(num+1,y,sv.save[num].ascii[i],sv.save[num].reverse,
+//                        sv.save[num].enhance);
+//         if (sv.save[num].utf)
+//           y = drawSJISChar(fx,num+1,y,sv.save[num].sjis[i],sv.save[num].reverse,
+//                            sv.save[num].enhance);
+//       }
+//     }
 	
 	for (int i = 0; i<1024; i++) {
 		printf("%d -> %d\n",i,i%2);
-		if (i%2 == 0) frame[i] = 0B01010101;
+		if (i < 16) frame[i] = 0B11111111;
 	}
 	
     show_hardware_spi();	
