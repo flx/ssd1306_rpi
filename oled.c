@@ -295,7 +295,7 @@ int main(int argc, char **argv){
 	
 	for (int i = 0; i<1024; i++) {
 		printf("%d -> %d\n",i,i%2);
-		if (i < 16) frame[i] = 0B11111111;
+		if (i%32 < 16) frame[i] = 0B11111111;
 	}
 	
     show_hardware_spi();	
