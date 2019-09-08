@@ -172,25 +172,7 @@ Initialize SSD1306 (hardware spi)
 */
 
 void init_hardware_spi(void){
-  int byte;
 
-  for(byte=0;byte<1024;byte++){
-    frame[byte] = 0x00;
-  }
-
-  wiringPiSetup();
-  pinMode (DC, OUTPUT) ;
-  pinMode (RST, OUTPUT) ;
-  wiringPiSPISetup(0, 32*1000*1000);
-  digitalWrite(RST,  HIGH) ;
-  delay(50);
-  digitalWrite(RST,  LOW) ;
-  delay(50);
-  digitalWrite(RST,  HIGH) ;
-  digitalWrite(DC, LOW);
-  digitalWrite(CS, LOW);
-  wiringPiSPIDataRW(0, init_command, sizeof(init_command));
-  digitalWrite(CS, HIGH);
 
 }
 
@@ -199,6 +181,22 @@ Show frame buffer to SSD1306 (spi)
 */
 
 void show_hardware_spi(void){
+	// init
+    wiringPiSetup();
+    pinMode (DC, OUTPUT) ;
+    pinMode (RST, OUTPUT) ;
+    wiringPiSPISetup(0, 32*1000*1000);
+    digitalWrite(RST,  HIGH) ;
+    delay(50);
+    digitalWrite(RST,  LOW) ;
+    delay(50);
+    digitalWrite(RST,  HIGH) ;
+    digitalWrite(DC, LOW);
+    digitalWrite(CS, LOW);
+    wiringPiSPIDataRW(0, init_command, sizeof(init_command));
+    digitalWrite(CS, HIGH);
+
+	// show frame
   digitalWrite(DC,  HIGH);
   digitalWrite(CS, LOW);
   wiringPiSPIDataRW(0, frame, 1024);
