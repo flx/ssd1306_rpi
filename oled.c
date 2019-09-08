@@ -98,7 +98,6 @@ void DumpSaveFrame(SaveFrame hoge);
 
 int i2cd;
 
-#ifndef X32
 // 128x64
 unsigned char init_command[] = {
     0xAE, 0xA8, 0x3F, 0xD3, 0x00, 0x40, 0xA1, 0xC8,
@@ -107,18 +106,6 @@ unsigned char init_command[] = {
     0xA4, 0xDB, 0x40, 0x20, 0x00, 0x00, 0x10, 0x8D,
     0x14, 0x2E, 0xA6, 0xAF
 };
-#endif
-
-#ifdef X32
-// 128x32
-unsigned char init_command[] = {
-    0xAE, 0xA8, 0x1F, 0xD3, 0x00, 0x40, 0xA1, 0xC8,
-    //0xA6, 0xD5, 0x80, 0xDA, 0x02, 0x81, 0x00, 0xB0,
-    0xA6, 0xD5, 0x80, 0xDA, 0x02, 0x81, 0xFF,
-    0xA4, 0xDB, 0x40, 0x20, 0x00, 0x00, 0x10, 0x8D,
-    0x14, 0x2E, 0xA6, 0xAF
-};
-#endif
 
 
 int main(int argc, char **argv){
@@ -127,7 +114,6 @@ int main(int argc, char **argv){
   FILE *fp;
   SaveFrame sv;
   
-if(OLED_DEBUG)  printf("argv[0]=%s\n",argv[0]);
   strcpy(cpath, argv[0]);
   for(i=strlen(cpath);i>0;i--) {
     if (cpath[i-1] == '/') {
@@ -136,19 +122,15 @@ if(OLED_DEBUG)  printf("argv[0]=%s\n",argv[0]);
     }
   }
   strcat(cpath,"oled.conf");
-if(OLED_DEBUG)  printf("cpath=%s\n",cpath);
 
   struct stat stat_buf;
   if (stat(cpath,&stat_buf) == 0) {
-if(OLED_DEBUG)    printf("file found\n");
     fp = fopen(cpath,"rb");
     fread(&sv,sizeof(sv),1,fp);
     fclose(fp);
   } else {
-if(OLED_DEBUG)    printf("file not found\n");
     memset(&sv,0,sizeof(sv));
   }
-if(OLED_DEBUG)DumpSaveFrame(sv);
 
   if (argc == 1) {
     usage(basename(argv[0]));
@@ -170,11 +152,9 @@ if(OLED_DEBUG)DumpSaveFrame(sv);
     strcpy(numc,argv[1]);
     num = (numc[1] - '0') - 1;
       
-if(OLED_DEBUG)printf("add string to line [%d]\n",num);
     sv.save[num].size = String2SJIS((unsigned char *)argv[2], strlen(argv[2]), sv.save[num].sjis, 16);
     sv.save[num].ank = 0;
     sv.save[num].utf = 1;
-if(OLED_DEBUG)DumpSaveFrame(sv);
     fp = fopen(cpath,"wb");
     fwrite(&sv,sizeof(sv),1,fp);
     fclose(fp);
@@ -187,13 +167,11 @@ if(OLED_DEBUG)DumpSaveFrame(sv);
        (strcmp(argv[1],"+d") == 0) ) {
     strcpy(numc,argv[1]);
     num = numc[1] - 'a';
-if(OLED_DEBUG)printf("add ASCII string to line [%d]\n",num);
 
     spos = 0;
     char *ptr;
     ptr = argv[2];
     for (i=0;i<strlen(argv[2]);i++) {
-if(OLED_DEBUG)printf("argv[2]=%c\n",*ptr);
       if (*ptr < 0x7f && spos < 16) {
         sv.save[num].ascii[spos++] = *ptr;
       }
@@ -202,7 +180,6 @@ if(OLED_DEBUG)printf("argv[2]=%c\n",*ptr);
     sv.save[num].ank = 1;
     sv.save[num].utf = 0;
     sv.save[num].size = spos;
-if(OLED_DEBUG)DumpSaveFrame(sv);
     fp = fopen(cpath,"wb");
     fwrite(&sv,sizeof(sv),1,fp);
     fclose(fp);
@@ -215,10 +192,8 @@ if(OLED_DEBUG)DumpSaveFrame(sv);
        (strcmp(argv[1],"-4") == 0) ) {
     strcpy(numc,argv[1]);
     num = (numc[1] - '0') - 1;
-if(OLED_DEBUG)printf("delete string to line [%d]\n",num);
     sv.save[num].size = 0;
     sv.save[num].reverse = 0;
-if(OLED_DEBUG)DumpSaveFrame(sv);
     fp = fopen(cpath,"wb");
     fwrite(&sv,sizeof(sv),1,fp);
     fclose(fp);
@@ -229,7 +204,6 @@ if(OLED_DEBUG)DumpSaveFrame(sv);
        (strcmp(argv[1],"-R") == 0) ) {
     strcpy(numc,argv[2]);
     num = (numc[0] - '0') - 1;
-if(OLED_DEBUG)printf("set/unset reverse to line [%d]\n",num);
     if (num < 0 || num > 3) return 0;
     if (strcmp(argv[1],"+R") == 0) sv.save[num].reverse = 1;
     if (strcmp(argv[1],"-R") == 0) sv.save[num].reverse = 0;
@@ -243,7 +217,6 @@ if(OLED_DEBUG)printf("set/unset reverse to line [%d]\n",num);
        (strcmp(argv[1],"-U") == 0) ) {
     strcpy(numc,argv[2]);
     num = (numc[0] - '0') - 1;
-if(OLED_DEBUG)printf("set/unset reverse to line [%d]\n",num);
     if (num < 0 || num > 3) return 0;
     if (strcmp(argv[1],"+U") == 0) sv.save[num].enhance = 1;
     if (strcmp(argv[1],"-U") == 0) sv.save[num].enhance = 0;
@@ -286,7 +259,6 @@ if(OLED_DEBUG)printf("set/unset reverse to line [%d]\n",num);
 //    col = (numc[0] - '0') - 1;
     col = atoi(numc) - 1;
     if (col < 0 || col > 16) return 0;
-if(OLED_DEBUG)printf("set start colum to line [%d] = %d\n",num,col);
     sv.save[num].colum = col;
     fp = fopen(cpath,"wb");
     fwrite(&sv,sizeof(sv),1,fp);
@@ -296,7 +268,6 @@ if(OLED_DEBUG)printf("set start colum to line [%d] = %d\n",num,col);
 
   if (strcmp(argv[1],"r") == 0) {
     memset(&sv,0,sizeof(sv));
-if(OLED_DEBUG)DumpSaveFrame(sv);
     fp = fopen(cpath,"wb");
     fwrite(&sv,sizeof(sv),1,fp);
     fclose(fp);
@@ -304,17 +275,8 @@ if(OLED_DEBUG)DumpSaveFrame(sv);
   }
 
   if (strcmp(argv[1],"s") == 0) {
-if(OLED_DEBUG)printf("show dislay\n");
 
-#ifdef SPI
     init_hardware_spi();
-#endif
-#ifdef SOFT_SPI
-    init_software_spi();
-#endif
-#ifdef I2C
-    init_i2c(I2C_ADDRESS);
-#endif
     int y;
     for (num=0;num<4;num++) {
       if (sv.save[num].size == 0) continue;
@@ -330,15 +292,7 @@ if(OLED_DEBUG)printf("show dislay\n");
                            sv.save[num].enhance);
       }
     }
-#ifdef SPI
     show_hardware_spi();	
-#endif
-#ifdef SOFT_SPI
-    show_software_spi();	
-#endif
-#ifdef I2C
-    show_i2c();	
-#endif
   }
 
   if (strcmp(argv[1],"D") == 0) {
@@ -374,57 +328,6 @@ void init_hardware_spi(void){
 
 }
 
-/*
-Initialize SSD1306 (software spi)
-*/
-
-void init_software_spi(void){
-  int byte;
-
-  for(byte=0;byte<1024;byte++){
-    frame[byte] = 0x00;
-  }
-
-  wiringPiSetup();
-  pinMode (CS, OUTPUT) ;
-  pinMode (DC, OUTPUT) ;
-  pinMode (RST, OUTPUT) ;
-  pinMode (MOSI, OUTPUT) ;
-  pinMode (SCLK, OUTPUT) ;
-  digitalWrite(RST,  HIGH) ;
-  delay(50);
-  digitalWrite(RST,  LOW) ;
-  delay(50);
-  digitalWrite(RST,  HIGH) ;
-  digitalWrite(DC, LOW);
-  digitalWrite(CS, LOW);
-  for(byte=0;byte<sizeof(init_command);byte++) {
-    shiftOut(MOSI, SCLK, MSBFIRST, init_command[byte]);
-  }
-  digitalWrite(CS, HIGH);
-
-}
-
-
-/*
-Initialize SSD1306 (i2c)
-*/
-
-void init_i2c(uint8_t i2caddr){
-  int byte;
-
-  for(byte=0;byte<1024;byte++){
-    frame[byte] = 0x00;
-  }
-	
-  i2cd = wiringPiI2CSetup(i2caddr);
-  int i;
-  for(i=0;i<sizeof(init_command);i++) {
-    unsigned int control = 0x00;    // Co = 0, D/C = 0
-    wiringPiI2CWriteReg8(i2cd, control, init_command[i]);
-  }
-
-}
 
 /*
 Draw SJIS character on SSD1306
@@ -579,7 +482,6 @@ int drawChar(int x,int y,unsigned char chr,uint8_t reverse,uint8_t enhance){
 	{0x00,0x02,0x02,0x7C,0x80,0x00,0x00,0x00,0x00,0x40,0x40,0x3F,0x00,0x00,0x00,0x00},//} 93
 	{0x00,0x06,0x01,0x01,0x02,0x02,0x04,0x04,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},//~ 94				
 	};
-if(SSD1306_DEBUG)  printf("drawChar chr=%x y=%d\n",chr,y);
   ascii_index = (chr-32);
   memcpy(a,num_str[ascii_index],8);
   memcpy(b,num_str[ascii_index]+8,8);
@@ -612,31 +514,6 @@ void show_hardware_spi(void){
   digitalWrite(CS, LOW);
   wiringPiSPIDataRW(0, frame, 1024);
   digitalWrite(CS, HIGH);
-}
-
-/*
-Show frame buffer to SSD1306 (software spi)
-*/
-
-void show_software_spi(void){
-  int byte;
-  digitalWrite(DC,  HIGH);
-  digitalWrite(CS,  LOW);
-  for(byte=0;byte<1024;byte++) {
-    shiftOut(MOSI, SCLK, MSBFIRST, frame[byte]);
-  }
-  digitalWrite(CS,  HIGH);
-}
-
-/*
-Show frame buffer to SSD1306 (i2c)
-*/
-
-void show_i2c(void){
-  int i;
-  for (i = 0; i < 1024; i++) {
-    wiringPiI2CWriteReg8(i2cd, 0x40, frame[i]);
-  }
 }
 
 
