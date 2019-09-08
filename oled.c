@@ -121,11 +121,6 @@ int main(int argc, char **argv){
     memset(&sv,0,sizeof(sv));
   }
 
-  if (argc == 1) {
-    usage(basename(argv[0]));
-    return 0;
-  }
-
   // You can change font file
   Fontx_init(fx,"./fontx/ILGH16XB.FNT","./fontx/ILGZ16XB.FNT"); // 16Dot Gothic
 //  Fontx_init(fx,"./fontx/ILMH16XB.FNT","./fontx/ILMZ16XB.FNT"); // 16Dot Mincyo
